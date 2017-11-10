@@ -1,0 +1,213 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+#use diagnostics;
+
+use utf8;
+
+binmode(STDOUT,":utf8");
+binmode(STDERR,":utf8");
+
+#afficher le fichier dans le shell -> retrouver le dossier (ls pour affichier les dossiers, cd pour changer de dossier) puis perl nom_du_fichier
+
+#compte jusque 10 boucle while
+
+my $i=1;
+while ($i<=10) {
+  print"$i";
+  $i=$i+1;
+}
+print"\n";
+
+#compte jusque 10 boucle for
+
+for (my $i=1 ; $i<=10 ; $i++) {
+  print"$i";
+}
+print"\n";
+
+#procedure avec paramètre
+
+sub CompteJusque ($) {
+  my ($n) = @_;
+  for (my $i=1 ; $i<=$n ; $i++) {
+    print"$i ";
+}
+print"\n";
+  
+}
+
+CompteJusque(15);
+
+#nom d'agent dérivé d'un verbe
+
+my $verbe = 'chanter';
+my $terminaison = substr ($verbe,-2,2);
+my $agent = $verbe; #évite de réassigner une valeur à la variable $verbe
+substr($agent,-2,2,'eur'); #la substitution de terminaison se fait directement dans la variable $agent
+print "Le nom d'agent de « $verbe » est « $agent ».\n";
+
+#avec une procédure
+
+sub NomAgent ($) {
+  my ($verbe) = @_;
+  my $terminaison = substr ($verbe,-2,2);
+  if ($terminaison eq 'er'){
+    if ($verbe eq 'aller') {print "La dérivation du nom d'agent n'est pas disponible pour « $verbe ».";}
+    else {
+      my $agent = $verbe;
+      substr ($agent,-2,2,'eur');
+      print "Le nom d'agent de « $verbe » est « $agent ».";}
+} else {print "La dérivation du nom d'agent n'est pas disponible pour « $verbe ».";}
+print "\n";
+}
+
+NomAgent('partir');
+NomAgent('aller');
+NomAgent('déminer');
+NomAgent('lancer');
+
+#tableau de verbes du premier groupe
+
+my @verbesg1 = ('foncer', 'plier', 'demander', 'jouer');
+
+#boucle sur le tableau
+
+foreach my $verbeg1 (@verbesg1) {
+  my $nom = $verbeg1;
+  substr ($nom,-2,2,'eur');
+  print "Le nom d'agent de « $verbeg1 » est « $nom ». \n";
+}
+
+#bloucle sur le tableau avec procédure avec résultat en HTML
+
+print "<!DOCTYPE html>\n";
+print "<html lang = \"fr\"\n";
+print "<head>\n";
+#ajouter éventuellement un lien vers une feuille css
+print "<title>Nom d'agent</title>\n";
+print "<meta charset=\"utf-8\">\n";
+print "<body>\n";
+print "<h1>Nom d'agent</h1>\n"; 
+print "<ul>\n";
+foreach my $verbeg1 (@verbesg1) {
+  print '<li>';
+  NomAgent($verbeg1);
+  print "</li>";
+}
+print "</ul>\n";
+print "</body>\n";
+print "</html>\n";
+
+
+#construction de verbes par préfixation en -dé
+
+#création d'un fichier HTML
+#open(HTML, '>inverses.html');
+#binmode(HTML, ':utf-8');
+#+ mettre print HTML sur tous les print
+#+ en fin de section à exporter mettre close(HTML); 
+
+print "<!DOCTYPE html>\n";
+print "<html lang = \"fr\"/>\n";
+print "<head>\n";
+print "<link rel=\"stylesheet\" type=\"text/css\" href=\"perlstyle.css\"/>";
+print "<title>Nom d'agent</title>\n";
+print "<meta charset=\"utf-8\">\n";
+print "<body>\n";
+print "<h1>Inversions par préfixation en dé-</h1>\n";
+#print "<ul>\n";
+
+#deux méthodes pour renvoyer si une lettre est une voyelle ou non
+
+sub est_une_voyelle_v1 ($) {
+  my ($lettre) = @_;
+  if (($lettre eq 'a') || ($lettre eq 'e') || ($lettre eq 'i') || ($lettre eq 'o') || ($lettre eq 'u') || ($lettre eq 'y')) {
+          return 'oui';
+} else { 
+  return 'non';
+  }
+}
+
+sub est_une_voyelle_v2 ($) {
+  my ($lettre) = @_;
+  my @voyelles = ('a','e', 'é', 'è', 'ê', 'i','o','u','y', 'h');
+foreach my $voyelle (@voyelles) {
+  if ($lettre eq $voyelle) {
+    return 'oui';
+  }
+}
+return 'non';
+}
+
+  
+sub prefixation ($) {
+
+my ($verbe_pf) = @_;
+my $premiere = substr ($verbe_pf,0,1);
+
+print "verbe  : <span class=\"verbe\">$verbe_pf</span><br/> \n";
+print "première lettre : <span class=\"premiere\">$premiere</span><br/> \n";
+
+if (est_une_voyelle_v2($premiere) eq 'oui') {
+  print "c'est une voyelle <br/>\n";
+  print "processus inverse : <span class=\"inverse\">dés$verbe_pf</span>\n";
+} else {
+  print "c'est une consonne <br/>\n";
+  if ($premiere eq 's'){
+  
+    my $deuxieme = substr($verbe_pf,1,1);
+  print "et c'est un s suivi d'un <span class=\"deuxieme\">$deuxieme</span><br/>\n";
+    if (est_une_voyelle_v2($deuxieme) eq 'oui') {
+      print "processus inverse : <span class=\"inverse\">des$verbe_pf</span>\n";
+    } else {
+    
+      print "processus inverse : <span class=\"inverse\">dé$verbe_pf</span>\n";
+}
+    } else {
+    print "et ce n'est pas un s <br/>\n";
+    print "processus inverse : <span class=\"inverse\">dé$verbe_pf</span>\n";
+  }
+}
+
+}
+
+my @verbes_pf_tab = ('chanter','saler', 'agréger', 'équilibrer', 'hydrater', 'stabiliser', 'stopper', 'saluer');
+
+foreach my $verbe_pf_tab (@verbes_pf_tab) {
+  print "<div class=\"bloc_prefixation\">"; 
+  prefixation($verbe_pf_tab);
+  print "</div>\n";
+}
+
+#print "</ul>\n";
+print "</body>\n";
+print "</html>\n";
+
+
+#créer un fichier html avec le terminal, dans le bon dossier > titre.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
