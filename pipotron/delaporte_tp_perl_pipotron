@@ -1,0 +1,98 @@
+#!/usr/bin/perl
+
+use warnings; # activation des messages d'erreurs
+use strict;   # déclaration des variables obligatoire
+use utf8;     # des accents dans le programme
+
+binmode(STDOUT,':utf8'); # sortie en utf8
+
+# lecture des verbes depuis un fichier texte
+my @verbes = ();
+open(IN,'verbes.txt');
+binmode(IN,':utf8');
+while (my $verbe = <IN>) { # tant qu'il y a des lignes dans le fichier
+
+	chop $verbe; # enlève le retour chariot
+	#print "« $verbe »\n";
+
+	my $terminaison = substr($verbe,-2,2);
+	if (($terminaison eq 'er') ) {
+		push(@verbes,$verbe); # ajout du verbe lu au tableau des verbes
+	}
+}
+#ajouter || ($terminaison eq 'ir') dans le if pour verbes g2
+
+close(IN);
+
+my @groupes_nominaux = ();
+open(IN,'groupes_nominaux.txt');
+binmode(IN,':utf8');
+while (my $groupe_nominal = <IN>) { # tant qu'il y a des lignes dans le fichier
+
+	chop $groupe_nominal; # enlève le retour chariot
+	#print "« $groupe_nominal »\n"; (pour vérification)
+	push(@groupes_nominaux,$groupe_nominal); 
+	}
+
+
+close(IN);
+
+
+#un verbe au hsard dans le tableau
+#my $nb_verbes = scalar(@verbes);
+#my $nb_au_hasard = rand($nb_verbes);
+#my $entier = int($nb_au_hasard);
+#my $verbe = $verbes[$entier];
+#print "$nb_verbes / $nb_au_hasard / $entier / $verbe \n \n";
+
+#print "en plus rapide : ";
+#print $verbes[int(rand(scalar(@verbes)))]; #un verbe au hasard
+#print "\n \n";
+
+
+
+
+# création d'un fichier HTML
+open(HTML,'>pipotron.html');
+binmode(HTML,':utf8');
+
+print HTML "<!doctype html>\n";
+print HTML "<html lang=\"fr\">\n";
+print HTML "<head>\n";
+print HTML "<link rel=\"stylesheet\" href=\"perl.css\">\n";
+print HTML "<title>pipotron</title>\n";
+print HTML "<meta charset=\"utf8\">\n";
+print HTML "</head>\n";
+print HTML "<body>\n";
+print HTML "<h1>pipotron</h1>\n";
+print HTML "<ul>\n";
+
+for (my $i = 1 ; $i <= 100 ; $i = $i + 1) {
+	my $sujet = $groupes_nominaux[int(rand(scalar(@groupes_nominaux)))];
+	my $verbe = $verbes[int(rand(scalar(@verbes)))];
+	substr($verbe,-1,2,'');
+	my $derniere = substr($sujet,-1,1);
+	if (($derniere eq 's') || ($derniere eq 'x')) {
+		$verbe = $verbe.'nt';
+}
+my $cod = $groupes_nominaux[int(rand(scalar(@groupes_nominaux)))];
+print HTML "<li> $sujet $verbe $cod. \n";
+}
+
+print HTML "</ul>\n";
+print HTML "</body>\n";
+print HTML "</html>\n";
+
+close(HTML);
+
+
+
+
+
+
+
+
+
+
+
+
