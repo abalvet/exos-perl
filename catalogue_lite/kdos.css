@@ -1,0 +1,44 @@
+body {
+	background-image : url(pattern.png);
+	background-repeat : repeat;
+}
+
+.title{
+    position:relative;
+    text-align:center;
+	margin : 50px;
+}
+.title::before{
+    content:"";
+    position:absolute;
+    top:50%;
+    left:0;
+    width:100%;
+    background:#990000;
+    height:2px;
+    z-index:-1;
+}
+.title span{
+	color : #FFFFFF;
+    background:#990000;
+    padding:4px 8px;
+}
+
+.nom {
+	color : #990000;
+	font-weight : bold;
+}
+
+table {
+	border-collapse : collapse;
+	background-color : #FFFFFF;
+}
+
+th, td {
+	padding : 10px;
+	border-bottom : solid 2px #990000;
+}
+
+tr:hover {
+	background-color: #c2f0c2;
+}
