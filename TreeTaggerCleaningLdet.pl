@@ -9,6 +9,8 @@ open(OUT,">3_tagged_clean3.txt");
 binmode (IN,':utf8');
 binmode (OUT,':utf8');
 
+#SCRIPT A RETRAVAILLER = PLANTAGE SI 2 APOSTROPHES DANS UNE MEME LIGNE
+
 # Problème → {l,.NOM} ' {idée,idée.NOM}
 # Problème → {l,.VER:pper} ' {assurance,assurance.NOM}
 # But → {l',le.DET:ART}{assurance,assurance.NOM}
